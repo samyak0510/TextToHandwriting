@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".DrawingActivity"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="10"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.2"
+            android:background="@color/accent_material_light"
+            android:paddingLeft="@dimen/_10sdp"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_gravity="center_vertical"
+                android:layout_width="@dimen/_45sdp"
+                android:layout_height="@dimen/_45sdp"
+                android:text="&lt;"
+                android:backgroundTint="#664FA3"
+                android:textSize="@dimen/_20ssp"
+                />
+
+            <TextView
+                android:gravity="center"
+                android:id="@+id/tvCurrentChar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Draw: "
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/_25ssp"
+                android:layout_margin="16dp"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6.3">
+
+            <com.example.texttohandwriting.DrawingView
+                android:id="@+id/drawingView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="#664FA3">
+
+            <TextView
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Marker Size"
+                android:textSize="@dimen/_20ssp"/>
+
+            <SeekBar
+
+                android:id="@+id/seekBarMarkerSize"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:max="50"
+                android:progress="8"
+                android:thumbTint="@android:color/white"
+                android:progressTint="@android:color/white"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_weight="1.5"
+            android:background="@color/accent_material_light"
+            >
+
+            <Button
+                android:id="@+id/btnClear"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:text="Clear"
+                android:layout_margin="@dimen/_10sdp"
+                android:textSize="@dimen/_15ssp"/>
+
+            <Button
+                android:id="@+id/btnNext"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:text="Next"
+                android:layout_margin="@dimen/_10sdp"
+                android:textSize="@dimen/_15ssp"/>
+
+            <Button
+                android:id="@+id/btnFinish"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:text="Finish"
+                android:layout_margin="@dimen/_10sdp"
+                android:textSize="@dimen/_15ssp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+</FrameLayout>

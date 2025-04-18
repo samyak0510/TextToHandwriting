@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.Theme.TextToHandwriting" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:forceDarkAllowed">false</item>
+        <!-- Make the status bar color black -->
+        <item name="android:statusBarColor">#000000</item>
+        <!-- Allow content to go under the status bar -->
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+</resources>

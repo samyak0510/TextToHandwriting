@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.TextToHandwriting" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Make the status bar color black -->
+        <item name="android:statusBarColor">#000000</item>
+        <!-- Allow content to go under the status bar -->
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+</resources>
