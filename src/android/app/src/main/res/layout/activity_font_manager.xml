@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".FontManagerActivity"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_65sdp"
+        android:gravity="center_vertical"
+        android:background="#664FA3">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/_85sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_margin="@dimen/_5sdp"
+            android:text="Back"
+            android:backgroundTint="#8E79CA"
+            android:textSize="@dimen/_15ssp"/>
+
+        <TextView
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_30ssp"
+            android:text="Font Manager"/>
+
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/listViewFonts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="0.5dp"
+        android:padding="8dp"
+        android:background="#F5F0FF"
+        android:clipToPadding="false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_10sdp">
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_55sdp"
+            android:textSize="@dimen/_18ssp"
+            android:text="Refresh"/>
+
+        <Button
+            android:id="@+id/postCreationCreateFontButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_55sdp"
+            android:textSize="@dimen/_18ssp"
+            android:text="Create New Font"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:weightSum="2">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/btnStartDrawing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Start Drawing"
+            android:src="@drawable/ic_main_draw"
+            android:scaleType="centerCrop"
+            android:foreground="@drawable/main_button_selector"
+            android:layout_marginBottom="@dimen/_10sdp"/>
+
+        <TextView
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="START DRAWING"
+            android:textSize="@dimen/_28ssp"/>
+
+
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+        <ImageButton
+            android:id="@+id/btnStartScanning"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_main_scan"
+            android:scaleType="centerCrop"
+            android:foreground="@drawable/main_button_selector"
+            android:text="Scan Text"/>
+
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/_28ssp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="START SCANNING"
+            android:layout_marginTop="@dimen/_15sdp"/>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

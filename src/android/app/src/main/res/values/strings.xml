@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TextToHandwriting</string>
+    <string name="ipValue">192.168.135.229</string>
+</resources>

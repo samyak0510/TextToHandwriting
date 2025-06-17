@@ -1,0 +1,369 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Backend testing and analysis
+  backend-tests:
+    name: Backend Tests & Analysis
+    runs-on: ubuntu-latest
+    
+    services:
+      # Add services if needed (e.g., database, redis)
+      test-db:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: Install external tools (for testing)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y fontforge potrace
+        
+    - name: Run backend tests
+      working-directory: src/backend
+      run: |
+        mvn clean compile
+        mvn test
+        mvn verify
+
+    - name: Generate test coverage report
+      working-directory: src/backend
+      run: mvn jacoco:report
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: src/backend/target/site/jacoco/jacoco.xml
+        flags: backend
+        name: backend-coverage
+
+    - name: Run security scan
+      uses: github/super-linter@v4
+      env:
+        DEFAULT_BRANCH: main
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VALIDATE_JAVA: true
+        JAVA_FILE_NAME: checkstyle.xml
+
+  # Android testing and analysis  
+  android-tests:
+    name: Android Tests & Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Cache Gradle dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: ${{ runner.os }}-gradle-
+
+    - name: Grant execute permission for gradlew
+      working-directory: src/android
+      run: chmod +x gradlew
+
+    - name: Run unit tests
+      working-directory: src/android
+      run: ./gradlew test
+
+    - name: Run lint checks
+      working-directory: src/android
+      run: ./gradlew lint
+
+    - name: Upload lint results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: android-lint-results
+        path: src/android/app/build/reports/lint-results-*.html
+
+    - name: Build APK
+      working-directory: src/android
+      run: ./gradlew assembleDebug
+
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: debug-apk
+        path: src/android/app/build/outputs/apk/debug/*.apk
+
+  # Integration testing
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: [backend-tests]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install external tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y fontforge potrace
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r tests/requirements.txt
+
+    - name: Start backend server
+      working-directory: src/backend
+      run: |
+        mvn clean compile
+        mvn spring-boot:run &
+        echo $! > backend.pid
+        
+        # Wait for server to start
+        timeout 60 bash -c 'until curl -f http://localhost:8080/api/v1/health; do sleep 2; done'
+
+    - name: Run integration tests
+      run: |
+        cd tests
+        python -m pytest integration/ -v --html=report.html --self-contained-html
+
+    - name: Upload test report
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: integration-test-report
+        path: tests/report.html
+
+    - name: Stop backend server
+      if: always()
+      run: |
+        if [ -f src/backend/backend.pid ]; then
+          kill $(cat src/backend/backend.pid) || true
+        fi
+
+  # Code quality and security analysis
+  code-quality:
+    name: Code Quality & Security
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Shallow clones should be disabled for better analysis
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Cache SonarCloud packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: Run SonarCloud analysis
+      working-directory: src/backend
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        mvn clean verify sonar:sonar \
+          -Dsonar.projectKey=texttohandwriting \
+          -Dsonar.organization=your-org \
+          -Dsonar.host.url=https://sonarcloud.io
+
+    - name: Run dependency check
+      working-directory: src/backend
+      run: |
+        mvn org.owasp:dependency-check-maven:check
+
+    - name: Upload dependency check report
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: dependency-check-report
+        path: src/backend/target/dependency-check-report.html
+
+  # Documentation checks
+  documentation:
+    name: Documentation Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install markdown linter
+      run: |
+        pip install markdownlint-cli2
+
+    - name: Lint documentation
+      run: |
+        markdownlint-cli2 "**/*.md" "#node_modules" "#target" "#build"
+
+    - name: Check links in documentation
+      uses: lycheeverse/lychee-action@v1.8.0
+      with:
+        args: --verbose --no-progress **/*.md
+        fail: true
+
+  # Performance testing (optional)
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    needs: [backend-tests]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Install external tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y fontforge potrace
+
+    - name: Start backend server
+      working-directory: src/backend
+      run: |
+        mvn clean compile
+        mvn spring-boot:run &
+        echo $! > backend.pid
+        timeout 60 bash -c 'until curl -f http://localhost:8080/api/v1/health; do sleep 2; done'
+
+    - name: Run performance tests
+      run: |
+        # Add performance testing commands here
+        # e.g., Apache Bench, JMeter, or custom scripts
+        echo "Performance tests would run here"
+
+    - name: Stop backend server
+      if: always()
+      run: |
+        if [ -f src/backend/backend.pid ]; then
+          kill $(cat src/backend/backend.pid) || true
+        fi
+
+  # Release preparation (only on main branch)
+  release-prep:
+    name: Release Preparation
+    runs-on: ubuntu-latest
+    needs: [backend-tests, android-tests, integration-tests, code-quality]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Build release APK
+      working-directory: src/android
+      run: |
+        chmod +x gradlew
+        ./gradlew assembleRelease
+
+    - name: Build backend JAR
+      working-directory: src/backend
+      run: |
+        mvn clean package -Dmaven.test.skip=true
+
+    - name: Upload release artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-artifacts
+        path: |
+          src/android/app/build/outputs/apk/release/*.apk
+          src/backend/target/*.jar
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        # Generate changelog from git commits
+        echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+        git log --pretty=format:"- %s" $(git describe --tags --abbrev=0)..HEAD >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Create release notes
+      if: success()
+      run: |
+        echo "Release prepared successfully!"
+        echo "Artifacts are ready for deployment."
+        echo "${{ steps.changelog.outputs.CHANGELOG }}" 
