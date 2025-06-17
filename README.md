@@ -23,7 +23,6 @@ A sophisticated Android application that converts handwritten characters into pe
 │   └── architecture/     # Architecture diagrams
 ├── assets/               # Media assets and screenshots
 ├── tests/                # Test suites
-├── scripts/              # Build and deployment scripts
 └── resources/            # Configuration templates
 ```
 
