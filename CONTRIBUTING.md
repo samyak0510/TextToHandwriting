@@ -46,10 +46,6 @@ mvn spring-boot:run
 # Open src/android/ in Android Studio
 # Sync project and run on device/emulator
 
-# Setup testing environment
-pip install -r tests/requirements.txt
-python -m pytest tests/ -v
-```
 
 ## Code Standards
 
@@ -57,8 +53,6 @@ python -m pytest tests/ -v
 
 - **Style**: Follow Google Java Style Guide
 - **Documentation**: Use JavaDoc for all public methods
-- **Testing**: Minimum 80% code coverage
-- **Logging**: Use SLF4J with appropriate log levels
 
 ```java
 /**
@@ -72,30 +66,6 @@ public ReturnType methodName(ParameterType inputParameter) {
     logger.info("Starting operation: {}", operationName);
     // Implementation
 }
-```
-
-### Python (Testing & Scripts)
-
-- **Style**: Follow PEP 8
-- **Type Hints**: Use type annotations
-- **Documentation**: Use docstrings for all functions
-- **Testing**: pytest with fixtures
-
-```python
-def process_data(input_data: List[str]) -> Dict[str, Any]:
-    """
-    Process input data and return structured results.
-    
-    Args:
-        input_data: List of strings to process
-        
-    Returns:
-        Dictionary containing processed results
-        
-    Raises:
-        ValueError: If input_data is empty or invalid
-    """
-    pass
 ```
 
 ## Git Workflow
@@ -136,40 +106,6 @@ test(integration): add font processing pipeline tests
 - `refactor`: Code refactoring
 - `test`: Adding missing tests
 - `chore`: Build process or auxiliary tool changes
-
-## Testing Guidelines
-
-### Backend Tests
-
-```bash
-cd src/backend
-mvn test                    # Unit tests
-mvn verify                  # Integration tests
-mvn jacoco:report          # Coverage report
-```
-
-### Android Tests
-
-```bash
-cd src/android
-./gradlew test             # Unit tests
-./gradlew connectedAndroidTest  # Instrumented tests
-```
-
-### Integration Tests
-
-```bash
-# Ensure backend is running on localhost:8080
-cd tests
-python -m pytest integration/ -v
-```
-
-### Test Requirements
-
-- **Unit Tests**: All public methods must have unit tests
-- **Integration Tests**: End-to-end functionality must be tested
-- **Mock External Dependencies**: Use mocks for external services
-- **Test Data**: Use fixtures and avoid hardcoded test data
 
 ## Documentation Standards
 
@@ -212,29 +148,6 @@ When adding features, update:
 - **Environment Variables**: Use env vars for configuration
 - **Validation**: Validate all inputs thoroughly
 
-### Network Security
-
-- **HTTPS Only**: All production communications must use HTTPS
-- **Certificate Pinning**: Implement for production
-- **Input Sanitization**: Sanitize all user inputs
-
-## Release Process
-
-### Version Numbering
-
-We use [Semantic Versioning](https://semver.org/):
-- `MAJOR.MINOR.PATCH`
-- Major: Breaking changes
-- Minor: New features, backward compatible
-- Patch: Bug fixes, backward compatible
-
-### Release Checklist
-
-- [ ] All tests pass
-- [ ] Documentation updated
-- [ ] Version numbers updated
-- [ ] Changelog updated
-- [ ] Security review completed (if applicable)
 
 ## Issue Reporting
 
@@ -262,14 +175,12 @@ Include:
 
 - **Small PRs**: Keep changes focused and small
 - **Self Review**: Review your own code first
-- **Tests**: Include appropriate tests
 - **Documentation**: Update docs if needed
 
 ### For Reviewers
 
 - **Be Constructive**: Provide helpful, actionable feedback
 - **Ask Questions**: Don't hesitate to ask for clarification
-- **Check Tests**: Ensure adequate test coverage
 - **Consider Performance**: Look for potential performance issues
 
 ## Communication
@@ -299,4 +210,4 @@ Contributors will be acknowledged in:
 
 ---
 
-Thank you for contributing to TextToHandwriting! 🎉 
+Thank you for contributing <3

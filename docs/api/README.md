@@ -4,12 +4,6 @@
 
 The TextToHandwriting REST API provides endpoints for font generation and text processing. The API follows RESTful principles and returns JSON responses.
 
-**Base URL**: `http://localhost:8080/api/v1`
-
-## Authentication
-
-Currently, the API does not require authentication for font processing endpoints. However, for AI text formatting features, ensure your OpenAI API key is properly configured in the Android client.
-
 ## Endpoints
 
 ### Font Processing
@@ -45,9 +39,6 @@ Content-Disposition: attachment; filename="output_font.ttf"
   "timestamp": "2024-01-15T10:30:00Z"
 }
 ```
-
-## Data Models
-
 
 ## Error Handling
 

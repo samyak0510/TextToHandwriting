@@ -130,7 +130,6 @@ spring.servlet.multipart.max-request-size=50MB
 3. **Set up OpenAI API Key** (securely):
    - The app uses Android Keystore for secure key storage
    - You'll need to provide your OpenAI API key during first run
-   - No hardcoded keys in source code
 
 ### 4. Build and Run
 

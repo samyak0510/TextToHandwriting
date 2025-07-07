@@ -141,29 +141,6 @@ TextToHandwriting follows a distributed microservice architecture with clear sep
    └─────────────┘
 ```
 
-## Security Architecture
-
-### Key Management
-- **Android Keystore**: Hardware-backed key storage
-- **API Key Encryption**: AES-256 encryption for OpenAI keys
-- **Certificate Pinning**: HTTPS with certificate validation
-
-### Network Security
-```
-┌─────────────┐    HTTPS/TLS 1.3    ┌─────────────┐
-│ Android App │ ◄─────────────────► │   Backend   │
-│             │                     │             │
-│ • Key Store │     Encrypted       │ • Config    │
-│ • Cert Pin  │     Transport       │ • Validation│
-└─────────────┘                     └─────────────┘
-```
-
-### Data Protection
-- **Input Validation**: Comprehensive sanitization
-- **File Size Limits**: 50MB upload maximum
-- **Path Traversal Protection**: Secure file handling
-- **Memory Management**: Automatic cleanup of temporary files
-
 ## Performance Architecture
 
 ### Asynchronous Processing
@@ -192,12 +169,6 @@ TextToHandwriting follows a distributed microservice architecture with clear sep
                    └─────────────┘
 ```
 
-### Resource Management
-- **Thread Pools**: Managed by Spring Boot
-- **Memory**: Automatic garbage collection
-- **File System**: Temporary file cleanup
-- **External Processes**: Process lifecycle management
-
 ## Deployment Architecture
 
 ### Development Environment
@@ -209,17 +180,6 @@ TextToHandwriting follows a distributed microservice architecture with clear sep
 │ • Backend   │◄──►│             │
 │ • Tools     │    │ • App Debug │
 └─────────────┘    └─────────────┘
-```
-
-### Production Environment
-```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│ Load        │    │ Application │    │ External    │
-│ Balancer    │◄──►│ Server      │◄──►│ Services    │
-│             │    │             │    │             │
-│ • SSL Term  │    │ • Spring    │    │ • FontForge │
-│ • Routing   │    │ • Java 17   │    │ • Potrace   │
-└─────────────┘    └─────────────┘    └─────────────┘
 ```
 
 ## Technology Stack
@@ -241,7 +201,7 @@ TextToHandwriting follows a distributed microservice architecture with clear sep
 ### External Dependencies
 - **FontForge**: Font creation and editing
 - **Potrace**: Bitmap to vector conversion
-- **OpenAI API**: GPT-4 text processing
+- **OpenAI API**: GPT-4o text processing
 - **Python**: FontForge scripting runtime
 
 ## Scalability Considerations

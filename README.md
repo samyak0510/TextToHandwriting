@@ -1,12 +1,28 @@
 # TextToHandwriting
 
-A sophisticated Android application that converts handwritten characters into personalized TTF fonts using computer vision and deep learning techniques. The system captures user drawings, processes them through advanced image processing algorithms, and generates production-ready font files.
+
+TextToHandwriting is an Android application that transforms your handwritten alphabet into a custom TrueType font file. The app features AI-powered text formatting through GPT-4o integration for intelligent styling and content generation. Users draw each character on a mobile canvas, which gets processed by a Spring Boot backend service that vectorizes the strokes using FontForge and Potrace, ultimately generating a downloadable .ttf font file ready for installation and use.
+
+  <div align="center">
+    <div>
+      <img src="assets/images/1.png" height="350" style="margin: 10px;"/>
+      <img src="assets/images/2.jpg" height="350" style="margin: 10px;"/>
+    </div>
+    <div>
+      <img src="assets/images/3.jpg" height="350" style="margin: 10px;"/>
+      <img src="assets/images/4.jpg" height="350" style="margin: 10px;"/>
+    </div>
+    <div>
+      <img src="assets/images/5.jpg" height="350" style="margin: 10px;"/>
+      <img src="assets/images/6.jpg" height="350" style="margin: 10px;"/>
+    </div>
+  </div>
 
 ## Features
 
-- **Intelligent Character Recognition**: Advanced drawing canvas with adjustable brush sizes and real-time feedback
-- **Professional Font Generation**: Complete TTF font creation using FontForge and Potrace integration  
-- **AI-Powered Text Formatting**: GPT-4 integration for intelligent text styling and formatting
+- **Character Recognition**: Drawing canvas with adjustable brush sizes and real-time feedback
+- **Font Generation**: Complete TTF font creation using FontForge and Potrace integration  
+- **AI Text Formatting**: GPT-4o integration for intelligent text styling and formatting, also answers queries
 - **Cross-Platform Architecture**: Spring Boot backend with Android frontend
 - **Secure Configuration**: Industry-standard security practices for API keys and network communication
 - **Rich Text Editor**: Full-featured note editor with custom font support
@@ -26,26 +42,12 @@ A sophisticated Android application that converts handwritten characters into pe
 └── resources/            # Configuration templates
 ```
 
-## Demo
-
-### Character Drawing Interface
-![Drawing Interface](assets/images/drawing-interface.gif)
-*Real-time character drawing with adjustable brush sizes and instant feedback*
-
-### Font Generation Process
-![Font Generation](assets/images/font-generation.gif)
-*Automated font processing pipeline from sketches to TTF*
-
-### AI-Powered Text Editor
-![Text Editor](assets/images/text-editor.gif)
-*Rich text editing with custom fonts and AI formatting*
-
 ## Quick Start
 
 ### Prerequisites
 
 - **Android Development**
-  - Android Studio Arctic Fox or later
+  - Android Studio
   - Android SDK 24+ (Android 7.0)
   - Gradle 7.0+
 
@@ -107,13 +109,6 @@ The app automatically detects your development server IP. For manual configurati
 </resources>
 ```
 
-### Security Configuration
-Store your OpenAI API key securely using Android Keystore:
-```bash
-# Keys are automatically encrypted and stored in Android Keystore
-# No hardcoded credentials in source code
-```
-
 ## Testing
 
 Run the comprehensive test suite:
@@ -133,20 +128,6 @@ cd tests
 python -m pytest integration/
 ```
 
-## Performance Metrics
-
-- **Font Generation**: < 30 seconds for full character set
-- **Image Processing**: Real-time canvas rendering at 60fps
-- **API Response Time**: < 2 seconds for text formatting
-- **File Size**: Generated TTF files average 150KB
-
-## Security
-
-- **API Key Management**: Android Keystore encryption
-- **Network Security**: TLS 1.3 with certificate pinning
-- **Input Validation**: Comprehensive sanitization of user data
-- **File Upload**: Secure multipart handling with size limits
-
 ## Documentation
 
 - [API Documentation](docs/api/README.md) - Complete REST API reference
@@ -156,7 +137,7 @@ python -m pytest integration/
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on:
+Please see our [Contributing Guide](CONTRIBUTING.md) for details on:
 - Code style and standards
 - Development workflow
 - Testing requirements
